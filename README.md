@@ -77,3 +77,50 @@ C'est la cible qui ouvrira un shell vers notre machine ==> on appelle cela un <b
       Et voilà notre terminal est connecté à la machine cible et  toutes les commandes qu'on tapent seront exécutées maintenant
       sur la machine cible !!
      ![image](https://user-images.githubusercontent.com/121682396/211877071-bed59d3e-6895-423f-b37e-76597f59dba3.png)
+     
+     On doit trouver le flag dans le fichier user.txt
+     
+     Mais comme on ne sait pas où il se trouve, on recherche le fichier en ligne de commande  
+     
+              find / -name "nomFile" 2>/dev/null
+               
+              2>/dev/null : on redirige les erreurs vers le path /dev/null (considéré comme si on jeter dans une poubelle)
+               
+              Une fois le fichier trouvé on essaye de le lire si on a les droits :)
+    ![image](https://user-images.githubusercontent.com/121682396/211879377-8642a79a-4e99-4a2b-83ed-a260cc4216cd.png)
+    
+    ⭐️BINGO⭐️ on a notre FLAG !!🦾
+    
+    
+    ## Dernière étape : l'escalade de privilège
+    
+    On va rechercher des fichiers inhabituels avec les permissions SUID. 
+    Ce sont des fichiers exécutable par n'importe quel user, en héritant des permissions du propriétaire.
+          
+          find / -user root -perm /4000 2>:dev/null
+          
+          -user root : on recheche l'user qui est root
+          -perm /400 : les fichiers qui ont au moins 4000 comme privilèges (4000 reprèsente un fichier dont le bit SUID est défini)
+          
+   ![image](https://user-images.githubusercontent.com/121682396/211885527-2561edbb-6c0c-4149-9182-0a2837988d5a.png)
+
+    Hummmmm le fichier python très intéressant !! Dans ce cas là, on va sur le site GTFOBINS.
+    
+    GTFOBINS est un site répertoriant des binaires UNIX qui peut être utilisés pour escalader ou maintenir des privilèges.
+    
+    Nous allons sur le site de GTFOBINS puis nous recherchons le binaire  pour python 
+    
+    ![image](https://user-images.githubusercontent.com/121682396/211890019-ddb805ed-8d7b-40f8-a043-b217626c8744.png)
+
+    On séléctionne la section SUID
+    
+    ![image](https://user-images.githubusercontent.com/121682396/211890287-9c14920c-7cd9-455d-8485-ed862e8063e0.png)
+
+    Nous avons notre payload pour passer root (taper cette commande dans /usr/bin pour pouvoir exécuter python)
+    
+    ![image](https://user-images.githubusercontent.com/121682396/211890645-88c2a4a7-8427-4f44-8958-f4ccf499efde.png)
+     
+    On voit ici avec la commande id (Identifiant Utilisateur) que je suis bien root 🫅
+    
+    Direction repértoire /root pour la lecture du fichier root.txt pour récupèrer le dernier 🏳️
+
